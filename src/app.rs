@@ -34,7 +34,7 @@ impl App {
     pub fn tick(&mut self) {
         while let Ok(msg) = self.rx.try_recv() {
             match msg {
-                CollectorMessage::CpuUpdate(cores) => {
+                CollectorMessage::Cpu(cores) => {
                     if self.cpu_history.len() != cores.len() {
                         self.cpu_history = vec![Vec::new(); cores.len()];
                     }
@@ -45,10 +45,10 @@ impl App {
                         }
                     }
                 }
-                CollectorMessage::MemoryUpdate(info) => {
+                CollectorMessage::Memory(info) => {
                     self.memory = info;
                 }
-                CollectorMessage::ProcessUpdate(procs) => {
+                CollectorMessage::Process(procs) => {
                     self.processes = self.apply_sort(procs);
                 }
             }

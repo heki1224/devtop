@@ -42,7 +42,7 @@ pub fn render(frame: &mut Frame, area: ratatui::layout::Rect, app: &App) {
     ])
     .header(header)
     .block(Block::default().title(filter_hint).borders(Borders::ALL))
-    .highlight_style(Style::default().bg(Color::DarkGray))
+    .row_highlight_style(Style::default().bg(Color::DarkGray))
     .highlight_symbol(">> ");
 
     let mut state = TableState::default();

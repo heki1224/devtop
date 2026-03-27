@@ -25,7 +25,7 @@ pub async fn start(tx: mpsc::Sender<CollectorMessage>) {
             b.cpu_usage.partial_cmp(&a.cpu_usage).unwrap_or(std::cmp::Ordering::Equal)
         });
 
-        if tx.send(CollectorMessage::ProcessUpdate(processes)).await.is_err() {
+        if tx.send(CollectorMessage::Process(processes)).await.is_err() {
             break;
         }
         tokio::time::sleep(Duration::from_millis(2000)).await;

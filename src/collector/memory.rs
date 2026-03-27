@@ -14,7 +14,7 @@ pub async fn start(tx: mpsc::Sender<CollectorMessage>) {
             swap_total: sys.total_swap(),
             swap_used: sys.used_swap(),
         };
-        if tx.send(CollectorMessage::MemoryUpdate(info)).await.is_err() {
+        if tx.send(CollectorMessage::Memory(info)).await.is_err() {
             break;
         }
         tokio::time::sleep(Duration::from_millis(1000)).await;

@@ -14,7 +14,7 @@ pub async fn start(tx: mpsc::Sender<CollectorMessage>) {
         let usage: Vec<f64> = sys.cpus().iter()
             .map(|c| c.cpu_usage() as f64)
             .collect();
-        if tx.send(CollectorMessage::CpuUpdate(usage)).await.is_err() {
+        if tx.send(CollectorMessage::Cpu(usage)).await.is_err() {
             break;
         }
         tokio::time::sleep(Duration::from_millis(1000)).await;

@@ -74,9 +74,9 @@ impl SortMode {
 
 #[derive(Debug)]
 pub enum CollectorMessage {
-    CpuUpdate(Vec<f64>),      // per-core usage 0.0-100.0
-    MemoryUpdate(MemoryInfo),
-    ProcessUpdate(Vec<ProcessInfo>),
+    Cpu(Vec<f64>),      // per-core usage 0.0-100.0
+    Memory(MemoryInfo),
+    Process(Vec<ProcessInfo>),
 }
 
 #[cfg(test)]

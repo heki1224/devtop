@@ -1,0 +1,21 @@
+[package]
+name = "devtop"
+version = "0.1.0"
+edition = "2021"
+description = "A developer-focused TUI system monitor"
+license = "MIT"
+repository = "https://github.com/heki1224/devtop"
+
+[[bin]]
+name = "devtop"
+path = "src/main.rs"
+
+[dependencies]
+ratatui = "0.29"
+crossterm = "0.28"
+sysinfo = "0.33"
+tokio = { version = "1", features = ["full"] }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+anyhow = "1"

@@ -34,6 +34,7 @@ async fn main() -> Result<()> {
     tokio::spawn(collector::cpu::start(tx.clone()));
     tokio::spawn(collector::memory::start(tx.clone()));
     tokio::spawn(collector::process::start(tx.clone()));
+    tokio::spawn(collector::docker::start(tx.clone()));
 
     let mut app = App::new(rx);
 

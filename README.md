@@ -7,6 +7,7 @@ A developer-focused TUI system monitor written in Rust.
 - Real-time CPU per-core sparklines with average usage
 - Memory / Swap usage gauges
 - Process list with developer context icons ([R]ust, [N]ode, [P]ython, [D]ocker)
+- **Docker container panel**: container name, status, CPU%, memory usage (auto-hides if Docker is unavailable)
 - Sort by CPU / Memory / PID (`s` key)
 - Filter processes by name (`/` key)
 
@@ -46,7 +47,7 @@ devtop
 
 ## Roadmap
 
-- [ ] v0.2: Docker container integration
+- [x] v0.2: Docker container integration
 - [ ] v0.3: Network stats panel
 - [ ] v0.4: Disk I/O panel
 - [ ] v0.5: Theme system (multiple color themes via TOML)

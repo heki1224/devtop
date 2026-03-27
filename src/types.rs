@@ -1,5 +1,14 @@
 // src/types.rs
 #[derive(Debug, Clone)]
+pub struct ContainerInfo {
+    pub name: String,
+    pub status: String,
+    pub cpu_percent: f64,
+    pub memory_bytes: u64,
+    pub memory_limit: u64,
+}
+
+#[derive(Debug, Clone)]
 pub struct MemoryInfo {
     pub total: u64,
     pub used: u64,
@@ -77,6 +86,8 @@ pub enum CollectorMessage {
     Cpu(Vec<f64>),      // per-core usage 0.0-100.0
     Memory(MemoryInfo),
     Process(Vec<ProcessInfo>),
+    Docker(Vec<ContainerInfo>),
+    DockerUnavailable,
 }
 
 #[cfg(test)]
@@ -97,5 +108,37 @@ mod tests {
         assert_eq!(SortMode::Cpu.next(), SortMode::Memory);
         assert_eq!(SortMode::Memory.next(), SortMode::Pid);
         assert_eq!(SortMode::Pid.next(), SortMode::Cpu);
+    }
+
+    #[test]
+    fn test_container_info_creation() {
+        let c = ContainerInfo {
+            name: "web_app".to_string(),
+            status: "running".to_string(),
+            cpu_percent: 2.5,
+            memory_bytes: 128 * 1024 * 1024,
+            memory_limit: 512 * 1024 * 1024,
+        };
+        assert_eq!(c.name, "web_app");
+        assert_eq!(c.status, "running");
+        assert!((c.cpu_percent - 2.5).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_collector_message_docker_variant() {
+        let containers = vec![ContainerInfo {
+            name: "web".to_string(),
+            status: "running".to_string(),
+            cpu_percent: 1.0,
+            memory_bytes: 64 * 1024 * 1024,
+            memory_limit: 256 * 1024 * 1024,
+        }];
+        let msg = CollectorMessage::Docker(containers);
+        if let CollectorMessage::Docker(v) = msg {
+            assert_eq!(v.len(), 1);
+            assert_eq!(v[0].name, "web");
+        } else {
+            panic!("wrong variant");
+        }
     }
 }

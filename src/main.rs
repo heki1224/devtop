@@ -1,3 +1,4 @@
-fn main() {
-    println!("Hello, world!");
-}
+mod types;
+mod collector;
+
+fn main() {}

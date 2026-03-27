@@ -63,13 +63,12 @@ async fn collect_containers(
             Some(id) => id.clone(),
             None => continue,
         };
-        let short_id = id.chars().take(12).collect::<String>();
         let name = summary
             .names
             .as_ref()
             .and_then(|n| n.first())
             .map(|n| n.trim_start_matches('/').to_string())
-            .unwrap_or_else(|| short_id.clone());
+            .unwrap_or_else(|| id.chars().take(12).collect());
         let status = summary.status.clone().unwrap_or_else(|| "unknown".to_string());
 
         let stats_opt = get_stats(docker, &id).await;
@@ -92,7 +91,6 @@ async fn collect_containers(
         };
 
         result.push(ContainerInfo {
-            id: short_id,
             name,
             status,
             cpu_percent,

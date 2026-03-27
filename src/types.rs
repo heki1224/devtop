@@ -1,7 +1,6 @@
 // src/types.rs
 #[derive(Debug, Clone)]
 pub struct ContainerInfo {
-    pub id: String,
     pub name: String,
     pub status: String,
     pub cpu_percent: f64,
@@ -113,7 +112,6 @@ mod tests {
     #[test]
     fn test_container_info_creation() {
         let c = ContainerInfo {
-            id: "abc123def456".to_string(),
             name: "web_app".to_string(),
             status: "running".to_string(),
             cpu_percent: 2.5,
@@ -128,7 +126,6 @@ mod tests {
     #[test]
     fn test_collector_message_docker_variant() {
         let containers = vec![ContainerInfo {
-            id: "abc123def456".to_string(),
             name: "web".to_string(),
             status: "running".to_string(),
             cpu_percent: 1.0,

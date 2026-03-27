@@ -176,7 +176,6 @@ mod tests {
         let (tx, rx) = mpsc::channel(10);
         let mut app = App::new(rx);
         let containers = vec![ContainerInfo {
-            id: "abc123def456".to_string(),
             name: "web".to_string(),
             status: "running".to_string(),
             cpu_percent: 3.0,

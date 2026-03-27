@@ -1,7 +1,7 @@
 use tokio::sync::mpsc;
 use crossterm::event::{self, Event, KeyCode, KeyEvent};
 use std::time::Duration;
-use crate::types::{CollectorMessage, MemoryInfo, ProcessInfo, SortMode};
+use crate::types::{CollectorMessage, ContainerInfo, MemoryInfo, ProcessInfo, SortMode};
 
 pub struct App {
     pub cpu_history: Vec<Vec<f64>>,  // [core_index][time_index] スパークライン用
@@ -12,6 +12,8 @@ pub struct App {
     pub selected: usize,
     pub should_quit: bool,
     rx: mpsc::Receiver<CollectorMessage>,
+    pub containers: Vec<ContainerInfo>,
+    pub docker_available: bool,
 }
 
 const CPU_HISTORY_LEN: usize = 60;
@@ -27,6 +29,8 @@ impl App {
             selected: 0,
             should_quit: false,
             rx,
+            containers: Vec::new(),
+            docker_available: false,
         }
     }
 
@@ -50,6 +54,10 @@ impl App {
                 }
                 CollectorMessage::Process(procs) => {
                     self.processes = self.apply_sort(procs);
+                }
+                CollectorMessage::Docker(containers) => {
+                    self.docker_available = true;
+                    self.containers = containers;
                 }
             }
         }
@@ -151,5 +159,34 @@ mod tests {
         ];
         let sorted = app.apply_sort(procs);
         assert_eq!(sorted[0].name, "a");
+    }
+
+    #[test]
+    fn test_app_docker_initial_state() {
+        let (tx, rx) = mpsc::channel(10);
+        drop(tx);
+        let app = App::new(rx);
+        assert!(!app.docker_available);
+        assert!(app.containers.is_empty());
+    }
+
+    #[test]
+    fn test_tick_handles_docker_message() {
+        use crate::types::ContainerInfo;
+        let (tx, rx) = mpsc::channel(10);
+        let mut app = App::new(rx);
+        let containers = vec![ContainerInfo {
+            id: "abc123def456".to_string(),
+            name: "web".to_string(),
+            status: "running".to_string(),
+            cpu_percent: 3.0,
+            memory_bytes: 100,
+            memory_limit: 1000,
+        }];
+        tx.blocking_send(CollectorMessage::Docker(containers)).unwrap();
+        app.tick();
+        assert!(app.docker_available);
+        assert_eq!(app.containers.len(), 1);
+        assert_eq!(app.containers[0].name, "web");
     }
 }

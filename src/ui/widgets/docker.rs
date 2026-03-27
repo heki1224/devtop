@@ -31,8 +31,8 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
             Style::default().fg(Color::DarkGray)
         };
         Row::new(vec![
-            Cell::from(c.name.clone()),
-            Cell::from(c.status.clone()).style(status_style),
+            Cell::from(c.name.as_str()),
+            Cell::from(c.status.as_str()).style(status_style),
             Cell::from(format!("{:.1}%", c.cpu_percent)),
             Cell::from(mem_display),
         ])
@@ -51,13 +51,17 @@ pub fn render(frame: &mut Frame, area: Rect, app: &App) {
     frame.render_widget(table, area);
 }
 
+const KB: u64 = 1024;
+const MB: u64 = 1024 * 1024;
+const GB: u64 = 1024 * 1024 * 1024;
+
 fn format_bytes(bytes: u64) -> String {
-    if bytes >= 1024 * 1024 * 1024 {
-        format!("{:.1}GB", bytes as f64 / (1024.0 * 1024.0 * 1024.0))
-    } else if bytes >= 1024 * 1024 {
-        format!("{:.0}MB", bytes as f64 / (1024.0 * 1024.0))
-    } else if bytes >= 1024 {
-        format!("{:.0}KB", bytes as f64 / 1024.0)
+    if bytes >= GB {
+        format!("{:.1}GB", bytes as f64 / GB as f64)
+    } else if bytes >= MB {
+        format!("{:.0}MB", bytes as f64 / MB as f64)
+    } else if bytes >= KB {
+        format!("{:.0}KB", bytes as f64 / KB as f64)
     } else {
         format!("{}B", bytes)
     }

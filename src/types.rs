@@ -87,6 +87,7 @@ pub enum CollectorMessage {
     Memory(MemoryInfo),
     Process(Vec<ProcessInfo>),
     Docker(Vec<ContainerInfo>),
+    DockerUnavailable,
 }
 
 #[cfg(test)]

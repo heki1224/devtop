@@ -59,6 +59,10 @@ impl App {
                     self.docker_available = true;
                     self.containers = containers;
                 }
+                CollectorMessage::DockerUnavailable => {
+                    self.docker_available = false;
+                    self.containers = Vec::new();
+                }
             }
         }
     }

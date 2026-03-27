@@ -35,9 +35,16 @@ pub async fn start(tx: mpsc::Sender<CollectorMessage>) {
     let mut prev_stats: HashMap<String, (u64, u64)> = HashMap::new();
 
     loop {
-        let containers = collect_containers(&docker, &mut prev_stats).await;
-        if tx.send(CollectorMessage::Docker(containers)).await.is_err() {
-            break;
+        match collect_containers(&docker, &mut prev_stats).await {
+            Ok(containers) => {
+                if tx.send(CollectorMessage::Docker(containers)).await.is_err() {
+                    break;
+                }
+            }
+            Err(_) => {
+                let _ = tx.send(CollectorMessage::DockerUnavailable).await;
+                break;
+            }
         }
         tokio::time::sleep(Duration::from_secs(1)).await;
     }
@@ -46,15 +53,12 @@ pub async fn start(tx: mpsc::Sender<CollectorMessage>) {
 async fn collect_containers(
     docker: &Docker,
     prev_stats: &mut HashMap<String, (u64, u64)>,
-) -> Vec<ContainerInfo> {
+) -> Result<Vec<ContainerInfo>, bollard::errors::Error> {
     let options = ListContainersOptions::<String> {
         all: true,
         ..Default::default()
     };
-    let list = match docker.list_containers(Some(options)).await {
-        Ok(v) => v,
-        Err(_) => return Vec::new(),
-    };
+    let list = docker.list_containers(Some(options)).await?;
 
     let mut result = Vec::new();
 
@@ -99,7 +103,7 @@ async fn collect_containers(
         });
     }
 
-    result
+    Ok(result)
 }
 
 async fn get_stats(docker: &Docker, container_id: &str) -> Option<Stats> {

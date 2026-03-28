@@ -1,12 +1,13 @@
 use tokio::sync::mpsc;
 use crossterm::event::{self, Event, KeyCode, KeyEvent};
 use std::time::Duration;
-use crate::types::{CollectorMessage, ContainerInfo, MemoryInfo, ProcessInfo, SortMode};
+use crate::types::{CollectorMessage, ContainerInfo, MemoryInfo, NetworkInfo, ProcessInfo, SortMode};
 
 pub struct App {
     pub cpu_history: Vec<Vec<f64>>,  // [core_index][time_index] スパークライン用
     pub memory: MemoryInfo,
     pub processes: Vec<ProcessInfo>,
+    pub network_stats: Vec<NetworkInfo>,
     pub filter: String,
     pub sort_mode: SortMode,
     pub selected: usize,
@@ -24,6 +25,7 @@ impl App {
             cpu_history: Vec::new(),
             memory: MemoryInfo { total: 1, used: 0, swap_total: 1, swap_used: 0 },
             processes: Vec::new(),
+            network_stats: Vec::new(),
             filter: String::new(),
             sort_mode: SortMode::Cpu,
             selected: 0,
@@ -54,6 +56,9 @@ impl App {
                 }
                 CollectorMessage::Process(procs) => {
                     self.processes = self.apply_sort(procs);
+                }
+                CollectorMessage::Network(stats) => {
+                    self.network_stats = stats;
                 }
                 CollectorMessage::Docker(containers) => {
                     self.docker_available = true;

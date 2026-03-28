@@ -1,5 +1,12 @@
 // src/types.rs
 #[derive(Debug, Clone)]
+pub struct NetworkInfo {
+    pub name: String,
+    pub rx_bps: u64,
+    pub tx_bps: u64,
+}
+
+#[derive(Debug, Clone)]
 pub struct ContainerInfo {
     pub name: String,
     pub status: String,
@@ -86,6 +93,7 @@ pub enum CollectorMessage {
     Cpu(Vec<f64>),      // per-core usage 0.0-100.0
     Memory(MemoryInfo),
     Process(Vec<ProcessInfo>),
+    Network(Vec<NetworkInfo>),
     Docker(Vec<ContainerInfo>),
     DockerUnavailable,
 }

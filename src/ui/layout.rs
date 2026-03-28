@@ -3,6 +3,7 @@ use ratatui::layout::{Constraint, Direction, Layout, Rect};
 pub struct Areas {
     pub cpu: Rect,
     pub memory: Rect,
+    pub network: Rect,
     pub process: Rect,
     pub docker: Option<Rect>,
 }
@@ -14,6 +15,7 @@ pub fn build(area: Rect, docker_available: bool) -> Areas {
             .constraints([
                 Constraint::Length(6),
                 Constraint::Length(5),
+                Constraint::Length(7),
                 Constraint::Min(0),
                 Constraint::Length(8),
             ])
@@ -21,8 +23,9 @@ pub fn build(area: Rect, docker_available: bool) -> Areas {
         Areas {
             cpu: chunks[0],
             memory: chunks[1],
-            process: chunks[2],
-            docker: Some(chunks[3]),
+            network: chunks[2],
+            process: chunks[3],
+            docker: Some(chunks[4]),
         }
     } else {
         let chunks = Layout::default()
@@ -30,13 +33,15 @@ pub fn build(area: Rect, docker_available: bool) -> Areas {
             .constraints([
                 Constraint::Length(6),
                 Constraint::Length(5),
+                Constraint::Length(7),
                 Constraint::Min(0),
             ])
             .split(area);
         Areas {
             cpu: chunks[0],
             memory: chunks[1],
-            process: chunks[2],
+            network: chunks[2],
+            process: chunks[3],
             docker: None,
         }
     }

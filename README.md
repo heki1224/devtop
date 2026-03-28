@@ -48,7 +48,7 @@ devtop
 ## Roadmap
 
 - [x] v0.2: Docker container integration
-- [ ] v0.3: Network stats panel
+- [x] v0.3: Network stats panel
 - [ ] v0.4: Disk I/O panel
 - [ ] v0.5: Theme system (multiple color themes via TOML)
 - [ ] v0.6: Config file support (`~/.config/devtop/config.toml`)

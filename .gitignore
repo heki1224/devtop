@@ -1,2 +1,24 @@
 /target
 .worktrees/
+
+# Artifacts / local tools
+.artifacts/
+.prowl/
+tasks/
+
+# Environment / Secrets
+.env
+
+# Rust
+**/*.rs.bk
+rustc-ice-*.txt
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store

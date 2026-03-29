@@ -9,6 +9,7 @@ pub fn draw(frame: &mut Frame, app: &App) {
     widgets::cpu::render(frame, areas.cpu, app);
     widgets::memory::render(frame, areas.memory, app);
     widgets::network::render(frame, areas.network, app);
+    widgets::disk::render(frame, areas.disk, app);
     widgets::process::render(frame, areas.process, app);
     if let Some(docker_area) = areas.docker {
         widgets::docker::render(frame, docker_area, app);

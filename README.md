@@ -8,6 +8,7 @@ A developer-focused TUI system monitor written in Rust.
 - Memory / Swap usage gauges
 - Process list with developer context icons ([R]ust, [N]ode, [P]ython, [D]ocker)
 - **Docker container panel**: container name, status, CPU%, memory usage (auto-hides if Docker is unavailable)
+- **Disk I/O panel**: per-device read/write bytes/sec (filters macOS system volumes)
 - Sort by CPU / Memory / PID (`s` key)
 - Filter processes by name (`/` key)
 
@@ -49,7 +50,7 @@ devtop
 
 - [x] v0.2: Docker container integration
 - [x] v0.3: Network stats panel
-- [ ] v0.4: Disk I/O panel
+- [x] v0.4: Disk I/O panel
 - [ ] v0.5: Theme system (multiple color themes via TOML)
 - [ ] v0.6: Config file support (`~/.config/devtop/config.toml`)
 

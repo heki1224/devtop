@@ -1,5 +1,13 @@
 // src/types.rs
 #[derive(Debug, Clone)]
+pub struct DiskInfo {
+    pub name: String,
+    pub mount_point: String,
+    pub read_bps: u64,
+    pub write_bps: u64,
+}
+
+#[derive(Debug, Clone)]
 pub struct NetworkInfo {
     pub name: String,
     pub rx_bps: u64,
@@ -96,6 +104,7 @@ pub enum CollectorMessage {
     Network(Vec<NetworkInfo>),
     Docker(Vec<ContainerInfo>),
     DockerUnavailable,
+    Disk(Vec<DiskInfo>),
 }
 
 #[cfg(test)]
